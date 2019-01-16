@@ -11,7 +11,10 @@ def test_raise_errors(convolve_func):
     with pytest.raises(NotImplementedError) as error:
         convolve_func(kernel, image, mode='full')
         convolve_func(kernel, image, mode='valid')
-    convolve_func(kernel, image, mode='same')
+    try:
+        convolve_func(kernel, image, mode='same')
+    except NotImplementedError:
+        assert False
 
 
 @pytest.mark.parametrize('convolve_func', [convolve_loop, convolve])
@@ -58,5 +61,25 @@ def test_mode_smoothing_identity(convolve_func):
         [0, 1, 2, 3, 2],
         [0, 0, 1, 2, 2]
     ]).reshape(5, 5, 1) / 9
+
+    np.testing.assert_allclose(result, expected_result)
+
+
+@pytest.mark.parametrize('convolve_func', [convolve_loop, convolve])
+def test_mode_non_symmetric(convolve_func):
+    kernel = np.array([
+        [1, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+    ])
+    image = np.arange(25).reshape(5, 5)
+    result = convolve_func(kernel, image, mode='same')
+    expected_result = np.array([
+        [0, 0, 0, 0, 0],
+        [0, 0, 1, 2, 3],
+        [0, 5, 6, 7, 8],
+        [0, 10, 11, 12, 13],
+        [0, 15, 16, 17, 18]
+    ]).reshape(5, 5, 1)
 
     np.testing.assert_allclose(result, expected_result)
