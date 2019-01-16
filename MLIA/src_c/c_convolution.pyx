@@ -2,7 +2,7 @@ cimport cython
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef c_convolve(double[:, :] kernel, double[:, :, :] image, int M, int N, int B, int m, int n, double[:, :, :] result):
+cpdef void c_convolve(double[:, :] kernel, double[:, :, :] image, int M, int N, int B, int m, int n, double[:, :, :] result):
     """
     Computes the convolution of image by kernel. Called by the 'MLIA.convolve'-function.
     :param kernel: kernel of size (m, n)
@@ -24,4 +24,3 @@ cpdef c_convolve(double[:, :] kernel, double[:, :, :] image, int M, int N, int B
                 for i in range(m):
                     for j in range(n):
                         result[row, col, c] += image[row + i, col + j, c] * kernel[i, j]
-    return result

@@ -119,10 +119,15 @@ def convolve(kernel, image, mode='same'):
     M, N, B = image.shape
     m, n = kernel.shape
     kernel_w, kernel_h = m // 2, n // 2
+
+    # make sure the dtypes are correct for the cython-convolve
     kernel = np.array(kernel, dtype=np.float64)
     image_padded = np.zeros(shape=(M + m - 1, N + n - 1, B), dtype=np.float64)
+    result = np.zeros_like(image, np.float64)
+
+    # Reshape the image to preserve image size
     image_padded[kernel_w: -kernel_w, kernel_h: -kernel_h] = image
 
-    result = np.zeros_like(image, np.float64)
+    # this is done inplace
     c_convolve(kernel, image_padded, M, N, B, m, n, result)
     return result
