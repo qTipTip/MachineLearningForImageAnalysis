@@ -13,6 +13,7 @@ def test_raise_errors(convolve_func):
         convolve_func(kernel, image, mode='valid')
     convolve_func(kernel, image, mode='same')
 
+
 @pytest.mark.parametrize('convolve_func', [convolve_loop, convolve])
 def test_mode_output_size(convolve_func):
     kernel = np.zeros((3, 3))
@@ -20,6 +21,7 @@ def test_mode_output_size(convolve_func):
     result = convolve_func(kernel, image, mode='same')
 
     assert result.shape == (5, 5, 1)
+
 
 @pytest.mark.parametrize('convolve_func', [convolve_loop, convolve])
 def test_convolve_valid_single_entry(convolve_func):
@@ -41,6 +43,7 @@ def test_convolve_valid_single_entry(convolve_func):
     ]).reshape(3, 3, -1)
 
     np.testing.assert_allclose(result, expected_result)
+
 
 @pytest.mark.parametrize('convolve_func', [convolve_loop, convolve])
 def test_mode_smoothing_identity(convolve_func):
