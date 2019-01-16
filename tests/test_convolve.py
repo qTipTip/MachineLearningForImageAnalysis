@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from MLIA import convolve_loop, smoothing_filter, convolve
+from MLIA import convolve_loop, blur, convolve
 
 
 @pytest.mark.parametrize('convolve_func', [convolve_loop, convolve])
@@ -50,10 +50,8 @@ def test_convolve_valid_single_entry(convolve_func):
 
 @pytest.mark.parametrize('convolve_func', [convolve_loop, convolve])
 def test_mode_smoothing_identity(convolve_func):
-    kernel = smoothing_filter(3)
-
     image = np.eye(5)
-    result = convolve_func(kernel, image, mode='same')
+    result = blur(image, 3)
     expected_result = np.array([
         [2, 2, 1, 0, 0],
         [2, 3, 2, 1, 0],

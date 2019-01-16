@@ -1,9 +1,9 @@
 import numpy as np
 
 
-def smoothing(image, scale=3, mode='same'):
+def blur(image, scale=3, mode='same'):
     """
-    Convolves the image with a normalized smoothing filter of size (scale x scale), returns the convolved image.
+    Convolve the image with a normalized blur filter of size (scale x scale), returns the convolved image.
     :param image: a numpy array of shape (M, N) or (M, N, B)
     :param scale: the size of the filter kernel
     :param mode: 'full' / 'same' / 'valid'
@@ -20,7 +20,7 @@ def smoothing(image, scale=3, mode='same'):
 
 def sobel(image, mode='same'):
     """
-    Convolves the image with a Sobel filter and returns gradient magnitude and direction.
+    Convolve the image with a Sobel filter and returns gradient magnitude and direction.
 
     :param image: a numpy array of shape (M, N) or (M, N, B)
     :param mode: 'full' / 'same' / 'valid'
@@ -41,6 +41,20 @@ def sobel(image, mode='same'):
     Gy = convolve(kernel.T, image, mode)
 
     return Gx, Gy
+
+
+def prewitt(img, mode='same'):
+    """
+    Convolve the image with a Prewitt-filter, and return the gradient magnitude and direction.
+    :param img:
+    :param mode: 'full' / 'same' / 'valid'
+        'full': generate a response at each point of overlap, yielding an output image of size (M + m - 1, N + n - 1)
+        'same': generate a response for each point of overlap with the filter origin being inside the image,
+        yielding an output image of size (max(M, m), max(N, n))
+        'valid': generate a response for each point of complete overlap, yielding an output image of size (max(M,
+        m) - min(M, m) + 1, max(N, n) - min(N, n) + 1)
+    :return:
+    """
 
 
 def convolve_loop(kernel, image, mode='same'):
