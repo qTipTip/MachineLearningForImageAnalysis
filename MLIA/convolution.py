@@ -45,10 +45,10 @@ def sobel(image, mode='same'):
     return Gx, Gy
 
 
-def prewitt(img, mode='same'):
+def prewitt(image, mode='same'):
     """
     Convolve the image with a Prewitt-filter, and return the gradient magnitude and direction.
-    :param img:
+    :param image: a numpy array of shape (M, N) or (M, N, B)
     :param mode: 'full' / 'same' / 'valid'
         'full': generate a response at each point of overlap, yielding an output image of size (M + m - 1, N + n - 1)
         'same': generate a response for each point of overlap with the filter origin being inside the image,
@@ -57,6 +57,16 @@ def prewitt(img, mode='same'):
         m) - min(M, m) + 1, max(N, n) - min(N, n) + 1)
     :return:
     """
+    kernel = np.array([
+        [-1, 0, 1],
+        [-1, 0, 1],
+        [-1, 0, 1]
+    ])
+
+    Gx = convolve(kernel, image, mode)
+    Gy = convolve(kernel.T, image, mode)
+
+    return Gx, Gy
 
 
 def convolve_loop(kernel, image, mode='same'):
@@ -92,7 +102,7 @@ def convolve_loop(kernel, image, mode='same'):
             for c in range(B):
                 for i in range(m):
                     for j in range(n):
-                        result[row, col, c] += image_padded[row + i, col + j] * kernel[i, j]
+                        result[row, col, c] += image_padded[row + i, col + j, c] * kernel[i, j]
     return result
 
 
