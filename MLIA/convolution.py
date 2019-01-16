@@ -1,5 +1,7 @@
 import numpy as np
 
+from MLIA.src_c.c_convolution import c_convolve
+
 
 def blur(image, scale=3, mode='same'):
     """
@@ -117,14 +119,10 @@ def convolve(kernel, image, mode='same'):
     M, N, B = image.shape
     m, n = kernel.shape
     kernel_w, kernel_h = m // 2, n // 2
-
-    image_padded = np.zeros(shape=(M + m - 1, N + n - 1, B))
+    kernel = np.array(kernel, dtype=np.float64)
+    image_padded = np.zeros(shape=(M + m - 1, N + n - 1, B), dtype=np.float64)
     image_padded[kernel_w: -kernel_w, kernel_h: -kernel_h] = image
 
-    result = np.zeros_like(image)
-    kernel = kernel.ravel()
-    for row in range(M):
-        for col in range(N):
-            for c in range(B):
-                result[row, col, c] += kernel @ image_padded[row:row + m, col:col + n, c].ravel()
+    result = np.zeros_like(image, np.float64)
+    c_convolve(kernel, image_padded, M, N, B, m, n, result)
     return result
