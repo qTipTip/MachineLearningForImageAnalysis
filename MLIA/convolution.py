@@ -29,7 +29,7 @@ def sobel(image, mode='same'):
         yielding an output image of size (max(M, m), max(N, n))
         'valid': generate a response for each point of complete overlap, yielding an output image of size (max(M,
         m) - min(M, m) + 1, max(N, n) - min(N, n) + 1)
-    :return: the gradient magnitude, and the gradient direction, as two numpy arrays.
+    :return: the gradient components
     """
     kernel = np.array([
         [-1, 0, 1],
@@ -40,10 +40,7 @@ def sobel(image, mode='same'):
     Gx = convolve(kernel, image, mode)
     Gy = convolve(kernel.T, image, mode)
 
-    mag = np.sqrt(Gx ** 2, Gy ** 2)
-    dir = np.arctan(Gy / Gx)
-
-    return mag, dir
+    return Gx, Gy
 
 
 def convolve_loop(kernel, image, mode='same'):
