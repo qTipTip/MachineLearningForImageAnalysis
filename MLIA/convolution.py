@@ -1,8 +1,49 @@
 import numpy as np
 
 
-def smoothing_filter(n):
-    return np.ones((n, n)) / n ** 2
+def smoothing(image, scale=3, mode='same'):
+    """
+    Convolves the image with a normalized smoothing filter of size (scale x scale), returns the convolved image.
+    :param image: a numpy array of shape (M, N) or (M, N, B)
+    :param scale: the size of the filter kernel
+    :param mode: 'full' / 'same' / 'valid'
+        'full': generate a response at each point of overlap, yielding an output image of size (M + m - 1, N + n - 1)
+        'same': generate a response for each point of overlap with the filter origin being inside the image,
+        yielding an output image of size (max(M, m), max(N, n))
+        'valid': generate a response for each point of complete overlap, yielding an output image of size (max(M,
+        m) - min(M, m) + 1, max(N, n) - min(N, n) + 1)
+    :return: The smoothed image.
+    """
+    kernel = np.ones((scale, scale)) / scale ** 2
+    return convolve(kernel, image, mode='same')
+
+
+def sobel(image, mode='same'):
+    """
+    Convolves the image with a Sobel filter and returns gradient magnitude and direction.
+
+    :param image: a numpy array of shape (M, N) or (M, N, B)
+    :param mode: 'full' / 'same' / 'valid'
+        'full': generate a response at each point of overlap, yielding an output image of size (M + m - 1, N + n - 1)
+        'same': generate a response for each point of overlap with the filter origin being inside the image,
+        yielding an output image of size (max(M, m), max(N, n))
+        'valid': generate a response for each point of complete overlap, yielding an output image of size (max(M,
+        m) - min(M, m) + 1, max(N, n) - min(N, n) + 1)
+    :return: the gradient magnitude, and the gradient direction, as two numpy arrays.
+    """
+    kernel = np.array([
+        [-1, 0, 1],
+        [-2, 0, 2],
+        [-1, 0, 1]
+    ])
+
+    Gx = convolve(kernel, image, mode)
+    Gy = convolve(kernel.T, image, mode)
+
+    mag = np.sqrt(Gx ** 2, Gy ** 2)
+    dir = np.arctan(Gy / Gx)
+
+    return mag, dir
 
 
 def convolve_loop(kernel, image, mode='same'):
