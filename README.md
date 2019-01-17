@@ -1,7 +1,6 @@
 # MLIA - Machine Learning of Image Analysis
 
-This small Python library contains Python-implementations of assorted image analysis related libraries. The repository will be updated throughout
-the autumn 2019. 
+This small Python library contain implementations of assorted image analysis related algorithms. The repository will be updated throughout the autumn 2019. 
 
 # Installation
 
