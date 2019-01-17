@@ -7,8 +7,8 @@ the autumn 2019.
 
 The library can be installed locally by cloning the repository, and running the `setup.py` file:
 
-```bash
-git clone https://github.com/qTipTip/MachineLearningForImageAnalysis
-cd MachineLearningForImageAnalysis
-python setup.py install
+```sh
+>> git clone https://github.com/qTipTip/MachineLearningForImageAnalysis
+>> cd MachineLearningForImageAnalysis
+>> python setup.py install
 ```
